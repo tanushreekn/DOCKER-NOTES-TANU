@@ -1,0 +1,41 @@
+
+ECR (Elastic Container Registry) is a fully-managed Docker container registry that makes it easy for developers to store, manage, 
+and deploy Docker container images. Here are some real-world examples of how ECR is used in AWS:
+
+// Create ECR in AWS.
+   
+Go to AWS console  
+  
+1. Create a registory in AWS
+   ECR -> create Registry -> private -> give registory naem -> craete registory
+   
+2.  Create IAM Role with required policy and attach to EC2 Servers.
+
+		# IAM Policiy to autheticate and pull & Push image.
+		AmazonEC2ContainerRegistryFullAccess
+
+		# IAM Policiy to autheticate and pull image.
+		AmazonEC2ContainerRegistryReadOnly
+
+	Note
+	1.  Copy URI of the created registory 
+		 docker build -t registory URL/image_name
+		 docker build -t 711472959942.dkr.ecr.ap-northeast-1.amazonaws.com/ecrimage
+	2.  copy the topken under -Retrieve an authentication token and authenticate your Docker client to your registry. Use the AWS CLI:
+		 ECR -> Registry ->registory name -> view push commands ->
+		 aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 711472959942.dkr.ecr.ap-northeast-1.amazonaws.comt-1.amazonaws.com
+
+3. follow the steps in docker console to push the image to ECR
+    
+	-> install aws cli 
+	   $sudo apt install aws_cli
+	-> configure aws
+	   $sudo aws configure
+	   $sudo aws ecr get-login-password --region ap-northeast-1 | docker login --username AWS --password-stdin 711472959942.dkr.ecr.ap-northeast-1.amazonaws.com
+	   $docker images
+	   $docker tag src_image:tag  registoryname/reponame:tag
+	    ex- docker tag tomcat:9.0  711472959942.dkr.ecr.ap-northeast-1.amazonaws.com/ecrimage:1.0
+	   $ sudo docker push registoryname/reponame:tag
+	     sudo docker push 711472959942.dkr.ecr.ap-northeast-1.amazonaws.com/ecrimage:1.0
+		 
+		 like this you can tag and psh as many nmber of images ,if  are pshing ro same repository it will store its versions with tag names attached

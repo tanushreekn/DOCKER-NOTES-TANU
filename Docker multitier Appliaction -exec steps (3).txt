@@ -1,0 +1,79 @@
+// Multi-tier Application (docker Compose)
+
+step 1 -  Clone the repo
+	git clone https://github.com/gustavopeiretti/springboot-postgresql-docker-example
+
+step 2 - install gradle to run this project
+	follow this link - https://linuxhint.com/installing_gradle_ubuntu/
+	
+	1. wget -c https://services.gradle.org/distributions/gradle-4.10.1-bin.zip -P /tmp
+	2. sudo apt install unzip -y
+	3. sudo unzip -d /opt/gradle /tmp/gradle-4.10.1-bin.zip
+	4. sudo vi /etc/profile.d/gradle.sh
+	    export GRADLE_HOME=/opt/gradle/gradle-4.10.1
+        export PATH=${GRADLE_HOME}/bin:${PATH}
+	5. sudo chmod +x /etc/profile.d/gradle.sh
+	6. source /etc/profile.d/gradle.sh\
+	7. gradle --version
+
+step 3 ubuntu@ip-172-31-2-233:~$ ls
+       ansrepo  apache-tomcat-9.0.71.tar.gz.asc  blog-spring-boot-postgres-jdbc-docker  springboot-postgresql-docker-example  terraform
+	  
+step 4 ubuntu@ip-172-31-2-233:~$ cd springboot-postgresql-docker-example/
+
+step 5 gradle build 
+step 6 sudo docker compose up --build
+       //use the port which has not been used ,change that in docker compose yml file 
+	
+step 7 1. curl -s -X POST http://localhost:8081/user/save -H 'Content-Type: application/json' -d '{"name":"Tanushree"}'
+       2. curl -s -X POST http://localhost:8081/user/save -H 'Content-Type: application/json' -d '{"name":"sowmya"}'
+	   
+step 8 1. curl -s -X GET http://localhost:8080/user/1
+       2. curl -s -X GET http://localhost:8080/user/2
+	   
+step 9- sudo docker exec -it  <postgressCID> bash
+
+step 10- psql -U postgres -d mydb //mybd is database name and postgres is user name which are available in docker compose yaml file
+
+step 11-select * from user_model;
+
+
+
+create a table company
+1. CREATE TABLE COMPANY(
+   ID INT PRIMARY KEY     NOT NULL,
+   NAME           TEXT    NOT NULL,
+   AGE            INT     NOT NULL,
+   ADDRESS        CHAR(50),
+   SALARY         REAL,
+   JOIN_DATE	  DATE
+);
+2. INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (1, 'Paul', 32, 'California', 20000.00,'2001-07-13');
+3. INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,JOIN_DATE) VALUES (2, 'Allen', 25, 'Texas', '2007-12-13');
+4. INSERT INTO COMPANY (ID,NAME,AGE,ADDRESS,SALARY,JOIN_DATE) VALUES (3, 'Teddy', 23, 'Norway', 20000.00, DEFAULT );
+5. SELECT * FROM COMPANY;
+
+
+Docker commands
+
+1. how do you copy images from one server to another server
+	solution1 -push to registory and pull from that registory
+	solution 2 -If registory is not found
+		convert that image into tar fle or zp fle 
+    $ sudo docker save  imagename:latest > myapp.tar //savng the mage as tar fle.
+		  
+2. how to create  a imagemage from tar file
+    $ docker load < myapp.tar   //myapp.tar s name of fle n whch docker mages has been stored
+	
+3. how to create an image from runnng container
+
+  $sudo docker commit CID  <newimagename>
+  
+4. how much CPU and MEM consumed by each  container
+
+    $sudo docker stats
+
+5.  $sudo docker diff    //Diff in layers
+
+6. what are the process which is ruuning inside a container
+   $sudo docker top CID
